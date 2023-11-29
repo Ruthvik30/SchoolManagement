@@ -1,0 +1,57 @@
+﻿@model List<TransportationStudentViewModel>
+@{
+    ViewBag.Title = "Student Transportation";
+    var studentId = ViewBag.StudentId;
+}
+<form method="post">
+    <div class="card">
+        <div class="card-header">
+            <h2>Add or remove Transportation from student</h2>
+        </div>
+        <div class="card-body">
+            <div class="form-check m-1">
+                @* <input id="noneradio" type="radio" class="form-check-input"
+                checked name="transportation" value=none />
+                <label for="noneradio">
+                None
+                </label> *@
+                <input type="checkbox" id="noneCheckbox" class="form-check-input" />
+                <label class="form-chack-label" for="noneCheckbox">None</label>
+            </div>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div class="form-check m-1">
+                    <input type="hidden" asp-for="@Model[i].TransportationId" />
+                    <input asp-for="@Model[i].IsSelected" class="form-check-input" />
+                    <label class="form-chack-label" asp-for="@Model[i].IsSelected">
+                        @Model[i].RouteName
+                    </label>
+                    <label class="px-3" asp-for="@Model[i].Amount">@Model[i].Amount</label>
+                </div>
+                @* <div class="form-check m-1">
+            <input type="hidden" asp-for="@Model[i].TransportationId" />
+            <input asp-for="@Model[i].IsSelected" type="radio" class="form-check-input"
+            checked="@Model[i].IsSelected" name="transportation" value="@Model[i].IsSelected" />
+            <label asp-for="@Model[i].IsSelected">
+            @Model[i].RouteName
+            </label>
+            <label class="px-3" asp-for="@Model[i].Amount">@Model[i].Amount</label>
+            </div> *@
+            }
+
+        </div>
+        <div class="card-footer">
+            <input id="btnUpdate" type="submit" value="Update" class="btn btn-primary" style="width:auto" />
+            <a asp-action="StudentDetails" asp-route-studentId="@studentId" class="btn btn-primary" style="width:auto">Cancel</a>
+        </div>
+    </div>
+</form>
+@section Scripts{
+    <script type="text/javascript">
+        $('input[type="checkbox"]').click(function () {
+            console.log("hello")
+            $('input[type="checkbox"]').prop("checked",false)
+            $(this).prop("checked", true)
+        })
+    </script>
+}

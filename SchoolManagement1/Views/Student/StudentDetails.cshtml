@@ -1,0 +1,224 @@
+﻿@model StudentDetail
+@{
+    ViewBag.Title = "Student Details";
+}
+<div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-7">
+            <div class="card p-2 text-center">
+                <div class="row">
+                    <div class="col-md-7 border-right no-gutters">
+                        <div class="py-3">
+                            <h4 class="text-secondary" style="font-size:2.0em">@Model.FirstName</h4>
+                            <div class="allergy"><span>@Model.LastName</span></div>
+                            <div class="stats">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex flex-column"> <span class="text-left head">DOB</span> <span class="text-left bottom">@Model.DOB()</span> </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex flex-column"> <span class="text-left head">Gender</span> <span class="text-left bottom">@Model.Gender</span> </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex flex-column"> <span class="text-left head">Standard</span> <span class="text-left bottom">@Model.Class.ClassName</span> </div>
+                                            </td>
+                                            <td>
+                                                @{
+                                                    decimal totalFee = Model.Class.FeeStructure.TotalFee();
+                                                    if (Model.StudentTransportation != null)
+                                                    {
+                                                        totalFee += (decimal)Model.StudentTransportation.Transportation.Amount;
+                                                    }
+                                                }
+                                                <div class="d-flex flex-column"> <span class="text-left head">Fee</span> <span class="text-left bottom">@totalFee</span> </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="px-3"><a asp-action="EditStudent" asp-route-studentId="@Model.StudentId" class="btn btn-primary btn-block">Edit Details</a></div>
+                                            </td>
+                                            <td>
+                                                <div class="px-3"><button id="btnShowFeeDetails" class="btn btn-secondary btn-block">Fee Details</button></div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="py-3" style=" margin-top:15px">
+                            <div> <span class="d-block head">Father Name</span> <span class="bottom">@Model.FatherName</span> </div>
+                            <div class="mt-4"> <span class="d-block head">Address</span> <span class="bottom">@Model.Address</span> </div>
+                            <div class="mt-4"> <span class="d-block head">Mobile Phone#</span> <span class="bottom">@Model.Phone</span> </div>
+                            <div class="mt-4"> <span class="d-block head"><button id="btnShowTransportation" class=" btn btn-secondary" style="width:auto">Transportation Details</button></span> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-5" style="display:none" id="divStudentTransportation">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-7">
+            <div class="card p-2 text-center">
+                <h4 class="text-secondary">Transportation Details</h4>
+                <div class="allergy"><span>@Model.FirstName</span></div>
+                <div class="stats">
+                    <table class="table table-borderless">
+                        <tbody>
+                            @if (Model.StudentTransportation != null)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="text-left head">Route</span>
+                                            <span class="text-left bottom">@Model.StudentTransportation.Transportation.RouteName</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="text-left head">Amount</span>
+                                            <span class="text-left bottom">@Model.StudentTransportation.Transportation.Amount</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="text-left head">Driver</span>
+                                            <span class="text-left bottom">@Model.StudentTransportation.Transportation.DriverName</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="text-left head">Driver Contact</span>
+                                            <span class="text-left bottom">@Model.StudentTransportation.Transportation.DriverContact</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="text-left head"></span>
+                                            <span class="text-left bottom">No transportation details</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                            <tr style="margin-top:2px">
+                                <td class="px-3" ><a asp-action="EditTransportationInStudent" asp-route-studentId="@Model.StudentId" class="btn btn-primary btn-block">Edit Transportation</a></td>
+                                <td class="px-3"><button id="btnHideTransportation" class="btn btn-secondary btn-block">Hide Details</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-5" id="divStudentFee">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-7">
+            <div class="card p-2 text-center">
+                <h4 class="text-secondary">Fee Details</h4>
+                <div class="allergy"><span>@Model.FirstName</span></div>
+                <div class="stats">
+                    <div class="table-responsive panel">
+                        <table class="table">
+                            <tbody>
+
+                                <tr>
+                                    <td class="text-success"><i class="fa fa-user"></i> Full Name</td>
+                                    <td>@Model.FirstName @Model.LastName</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-success"><i class="fa fa-list-ol"></i>Class</td>
+                                    <td>@Model.Class.ClassName</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-success"><i class="fa fa-book"></i> Annual Fee</td>
+                                    <td>@Model.Class.FeeStructure.AnnualFee</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-success"><i class="fa fa-group"></i>Exam Fee</td>
+                                    <td>@Model.Class.FeeStructure.ExamFee</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-success"><i class="fa fa-calendar"></i>Transportation Fee</td>
+                                    @if (Model.StudentTransportation != null)
+                                    {
+                                        <td>@Model.StudentTransportation.Transportation.Amount</td>
+                                    }
+                                    else
+                                    {
+                                        <td>N/A</td>
+                                    }
+                                </tr>
+                                <tr>
+                                    <td class="text-success"><i class="fa fa-university"></i>Total Fee </td>
+                                    <td>@totalFee</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="px-3"><button id="btnHideFee" class="btn btn-primary btn-block">Hide Details</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    body {
+        background-color: #ebeff2
+    }
+
+    .card {
+        background-color: white;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 5px 6px 6px 2px #e9ecef
+    }
+
+    .allergy {
+        position: relative;
+        bottom: 8px;
+        color: grey;
+        font-size: 1em
+    }
+
+    .head {
+        color: #97989a;
+        font-size: 14px
+    }
+
+    .bottom {
+        color: grey;
+        font-size: 18px
+    }
+</style>
+
+@section Scripts{
+    <script type="text/javascript">
+        $('#btnShowTransportation').click(function () {
+            $('#divStudentTransportation').show()
+        })
+        $('#btnHideTransportation').click(function () {
+            $('#divStudentTransportation').hide()
+        })
+        $('#btnShowFeeDetails').click(function () {
+            $('#divStudentFee').show()
+        })
+        $('#btnHideFee').click(function () {
+            $('#divStudentFee').hide()
+        })
+    </script>
+}

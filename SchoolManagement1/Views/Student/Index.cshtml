@@ -1,0 +1,101 @@
+﻿@{
+    ViewBag.Title = "Students";
+}
+@model IEnumerable<StudentDetail>
+<div style="padding:6px;width:130%;margin-left:-15%">
+    <div class="d-flex justify-content-between">
+        <span style="font-size: 1.5em;">
+            <b>Student Details</b>
+        </span>
+        <a asp-action="StudentRegistration" class="btn btn-primary" style="font-size:1.1em">Register New Student</a>
+    </div>
+    <table id="studenttable" class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Date Of Birth</th>
+                <th>Gender</th>
+                <th>Father Name</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Class</th>
+                <th>Settings</th>
+            </tr>
+        </thead>
+        <tbody class="table-active">
+            @foreach (var student in Model)
+            {
+                <tr>
+                    <td>@student.StudentId</td>
+                    <td>@student.FirstName</td>
+                    <td>@student.LastName</td>
+                    <td>@student.DateOfBirth</td>
+                    <td>@student.Gender</td>
+                    <td>@student.FatherName</td>
+                    <td>@student.Phone</td>
+                    <td>@student.Address</td>
+                    <td>@student.Class.ClassName</td>
+                    <td>
+                        <a asp-action="StudentDetails" asp-route-studentId="@student.StudentId" class=" btn btn-primary">
+                            <span class="material-symbols-outlined">
+                                info
+                            </span>
+                        </a>
+                        <a asp-action="EditStudent" asp-route-studentId="@student.StudentId" class=" btn btn-secondary">
+                            <span class="material-symbols-outlined">
+                                edit
+                            </span>
+                        </a>
+                        <a href="#" class=" btn btn-danger" id="deleteSpan_@student.StudentId" onclick="ConfirmDelete('@student.StudentId',true)">
+                            <span class="material-symbols-outlined" >
+                                delete
+                            </span>
+                        </a>
+                        <form method="post" asp-action="DeleteStudent" asp-route-studentId="@student.StudentId">
+                            <span id="confirmDeleteSpan_@student.StudentId" style="display:none">
+                                <span>Are you sure! you want to delete ?</span>
+                                <button type="submit" class="btn btn-danger">Yes</button>
+                                <a href="#" class="btn btn-primary" onclick="ConfirmDelete('@student.StudentId',false)">No</a>
+                            </span>
+
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts{
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#studenttable').dataTable({
+                lengthMenu: [10],
+                lengthChange: false,
+                columnDefs: [
+                    { targets: 3, render: function (data) { return data.substr(0, 10) } },
+                    { targets: [3, 5, 6, 7, 9], sortable: false },
+                    { targets: [3, 6, 7, 9], searchable: false }
+                ],
+                "bAutoWidth": false, // Disable the auto width calculation
+                "aoColumns": [
+                    { "sWidth": "5%" }, 
+                    { "sWidth": "10%" },
+                    { "sWidth": "10%" },
+                    { "sWidth": "10%" },
+                    { "sWidth": "8%" },
+                    { "sWidth": "12%" },
+                    { "sWidth": "10%" },
+                    { "sWidth": "10%" },
+                    { "sWidth": "9%" }, 
+                    { "sWidth": "30%" } 
+                ]
+            })
+        })
+    </script>
+    <script src="~/js/customscripts.js"></script>
+}
+

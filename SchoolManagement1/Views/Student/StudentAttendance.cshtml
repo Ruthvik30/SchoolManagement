@@ -1,0 +1,81 @@
+﻿@using SchoolManagement1.Data.Enum;
+@{
+    ViewBag.Title = "Attendence";
+}
+<form method="post">
+    <div class="card">
+        <div class="card-header text-center">
+            <h4 class="mb-0">Student Attendance</h4>
+            <div class="d-flex justify-content-center mt-3">
+                <span class="px-3">
+                    <select id="standard" name="standard" class="form-control" asp-items="@Html.GetEnumSelectList<Standard>()" required>
+                        <option value="" selected hidden>Select standard</option>
+                    </select>
+                </span>
+                <span class="px-3">
+                    <input id="date" name="date" type="date" class="form-control" required>
+                </span>
+                <span class="px-3">
+                    <button id="btnSubmit" style="height:44px;width:100px" class="btn btn-success">Submit</button>
+                </span>
+            </div>
+        </div>
+        <div class="card-body">
+            <div id="attendanceDiv" class="form-check"></div>
+        </div>
+        <div class="card-footer">
+            <p class="text-success">@ViewBag.SuccessMessage</p>
+        </div>
+    </div>
+</form>
+
+
+<style>
+    #standard, #date {
+        display: block;
+        width: 250px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+        color: #333;
+    }
+
+        #standard:focus {
+            outline: none;
+        }
+</style>
+
+@section Scripts{
+    <script type="text/javascript">
+        $('#standard').on('click change',function () {
+            var standardId = $(this).val()
+            console.log(standardId)
+            $.ajax({
+                type: "post",
+                url: "/student/GetStudentsByClass",
+                data: { classId: standardId },
+                success: function (data) {
+                    console.log("hello")
+                    console.log(data)
+                    handledata(data)
+                },
+                error: function (errormessage) {
+                    console.log(errormessage)
+                }
+            })
+        })
+        function handledata(data) {
+            var attendanceDiv = $('#attendanceDiv')
+            attendanceDiv.empty()
+            if (data.length == 0) {
+                attendanceDiv.html('<p>No student recoreds recovered!</p>')
+            } else {
+                $.each(data, function (index, student) {
+                    attendanceDiv.append(
+                        '<input class="form-check-input" type="checkbox" id="student_' + student.studentId + '" name="student_' + student.studentId + '" /><label class= "form-check-label" for="student_' + student.studentId + '"> ' + student.firstName + ' ' + student.lastName + '</label><br/>'
+                    )
+                })
+            }
+        }
+    </script>
+}

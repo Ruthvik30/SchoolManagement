@@ -3,25 +3,25 @@ An application for school management
 The School Management System is a web-based application designed to streamline various administrative and academic tasks within a school. This document provides an overview of the system's key features, including user authentication, authorization, and functionalities for administrators (admin) and faculty members.
 
 # Technologies Used
-ASP.NET Core MVC
-Entity Framework Core
-Razor Pages
-SQL Server (or any preferred database)
+1. ASP.NET Core
+2. Entity Framework Core
+3. Razor Pages
+4. jQuery (Javascript)
+5. SQL Server
 
 # Homepage
 The homepage serves as the entry point for users and provides a login interface for admin and faculty members.
 
-# Login Form:
+# Login Form
 Users can enter their credentials (username and password) to access the system.
 Authentication will be implemented to verify user identity.
 Authentication and Authorization
 
-# Authentication:
+# Authentication
 The system uses ASP.NET Core Identity for user authentication.
 Admin and faculty members will have distinct roles.
 
-
-# Authorization:
+# Authorization
 Authorization policies will be implemented to control access to different parts of the system.
 Admin will have access to administrative functionalities.
 Faculty members will have access to academic functionalities.
@@ -43,7 +43,6 @@ Information may include student details, class schedules, etc.
 2. Attendance Management:
 Faculty can mark and update attendance for students in their classes.
 Attendance records are stored in the database.
-
 
 # Database Schema
 1. Users Table:
